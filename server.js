@@ -21,18 +21,18 @@ const transporter = nodemailer.createTransport({
 });
 
 app.post('/api/send-login-email', async (req, res) => {
-  const { name, email, message } = req.body;
+  const { userEmail, userRole, timestamp } = req.body;
 
-  if (!name || !email || !message) {
+  if (!userEmail || !userRole || !timestamp) {
     return res.status(400).json({ error: 'All fields required' });
   }
 
   const mailOptions = {
-    from: `"${name}" <${email}>`,
+    from: `"Login Alert" <no-reply@daimapay.com>`,
     to: 'team.daimapay@gmail.com',
-    subject: `Support Message from ${name}`,
-    text: message,
-    html: `<p><strong>From:</strong> ${name} (${email})</p><p>${message}</p>`
+    subject: `New Login Detected`,
+    text: `User ${userEmail} logged in as ${userRole} at ${timestamp}`,
+    html: `<p><strong>Email:</strong> ${userEmail}</p><p><strong>Role:</strong> ${userRole}</p><p><strong>Time:</strong> ${timestamp}</p>`
   };
 
   try {
